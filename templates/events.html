@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="container" style="padding:3rem 0;">
+    <h2>Events & Announcements</h2>
+
+    {% for e in events %}
+    <div style="margin-top:1.5rem;">
+        <h4>{{ e.title }}</h4>
+        <small>{{ e.date }}</small>
+        <p>{{ e.description }}</p>
+    </div>
+    {% endfor %}
+</section>
+{% endblock %}

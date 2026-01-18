@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="container" style="padding:3rem 0;">
+    <h2>Faculty</h2>
+
+    <div style="margin-top:2rem;">
+        {% for f in faculty %}
+        <div style="margin-bottom:1.5rem;">
+            <h4>{{ f.name }}</h4>
+            <p>{{ f.designation }} — {{ f.department }}</p>
+            <small>{{ f.email }}</small>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+{% endblock %}

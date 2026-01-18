@@ -1,0 +1,55 @@
+.top-header {
+    background: var(--header-bg);
+    color: white;
+}
+
+.nav-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 0;
+}
+
+.logo {
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+}
+
+.logo span {
+    font-weight: 300;
+}
+
+.nav-links {
+    display: none;
+    gap: 1.5rem;
+}
+
+.nav-links a {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.apply-btn {
+    background: var(--primary);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+}
+
+.apply-btn:hover {
+    background: var(--primary-dark);
+}
+
+/* Desktop */
+@media (min-width: 768px) {
+    .nav-links {
+        display: flex;
+    }
+}
