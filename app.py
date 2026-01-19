@@ -5,17 +5,25 @@ from flask import request, redirect, url_for, session
 from database.models import verify_admin   
 from flask import jsonify
 from chatbot.rules import get_chatbot_response
+from bson.objectid import ObjectId
+import os
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.config.from_object(Config)
-
+def allowed_file(filename):
+    return (
+        "." in filename and
+        filename.rsplit(".", 1)[1].lower() in app.config["ALLOWED_EXTENSIONS"]
+    )
 mongo = PyMongo(app)
 
 # ---------- ROUTES ----------
 
 @app.route("/")
 def home():
-    return render_template("home.html")
+    faculty = mongo.db.faculty.find().limit(3)
+    return render_template("home.html", faculty=faculty)
 
 @app.route("/chatbot", methods=["POST"])
 def chatbot():
@@ -62,16 +70,33 @@ def manage_faculty():
         return redirect(url_for("admin_login"))
 
     if request.method == "POST":
+        image_file = request.files.get("image")
+        image_name = ""
+
+        if image_file and allowed_file(image_file.filename):
+            filename = secure_filename(image_file.filename)
+            image_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+            image_file.save(image_path)
+            image_name = filename
+
         mongo.db.faculty.insert_one({
             "name": request.form["name"],
             "designation": request.form["designation"],
             "department": request.form["department"],
-            "email": request.form["email"]
+            "email": request.form["email"],
+            "image": image_name
         })
 
     faculty_list = mongo.db.faculty.find()
     return render_template("admin/manage_faculty.html", faculty=faculty_list)
 
+@app.route("/admin/faculty/delete/<faculty_id>", methods=["POST"])
+def delete_faculty(faculty_id):
+    if "admin" not in session:
+        return redirect(url_for("admin_login"))
+
+    mongo.db.faculty.delete_one({"_id": ObjectId(faculty_id)})
+    return redirect(url_for("manage_faculty"))
 # ---------- EVENTS ----------
 @app.route("/events")
 def events():
@@ -122,6 +147,12 @@ def manage_articles():
 def placements():
     return render_template("placements.html")
 # ---------- MAIN ----------
+
+
+@app.route("/programmes")
+def programmes():
+    return render_template("programmes.html")
+
 
 if __name__ == "__main__":
     app.run(debug=True)

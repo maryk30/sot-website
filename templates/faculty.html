@@ -1,14 +1,26 @@
 {% extends "base.html" %}
 {% block content %}
 
-<section class="container" style="padding:3rem 0;">
-    <h2>Faculty</h2>
+<section class="container">
+    <h2 class="section-title">Faculty</h2>
+    <p class="section-subtitle">
+        Our faculty members bring together academic excellence,
+        industry experience, and research-driven teaching.
+    </p>
 
-    <div style="margin-top:2rem;">
+    <div class="card-grid">
         {% for f in faculty %}
-        <div style="margin-bottom:1.5rem;">
+        <div class="card">
+            {% if f.image %}
+            <img src="{{ url_for('static', filename='images/' ~ f.image) }}"
+                style="width:100%; height:220px; object-fit:cover; border-radius:12px; margin-bottom:1rem;">
+            {% else %}
+            <div style="height:220px; background:#e5e7eb; border-radius:12px; margin-bottom:1rem;"></div>
+            {% endif %}
+
             <h4>{{ f.name }}</h4>
-            <p>{{ f.designation }} — {{ f.department }}</p>
+            <p>{{ f.designation }}</p>
+            <small>{{ f.department }}</small><br>
             <small>{{ f.email }}</small>
         </div>
         {% endfor %}

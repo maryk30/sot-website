@@ -4,19 +4,52 @@
 <section class="container" style="padding:3rem 0;">
     <h2>Manage Faculty</h2>
 
-    <form method="POST" style="margin-top:1.5rem;">
-        <input name="name" placeholder="Name" required>
-        <input name="designation" placeholder="Designation" required>
-        <input name="department" placeholder="Department" required>
-        <input name="email" placeholder="Email" required>
+    <!-- ADD FACULTY FORM -->
+    <form method="POST"
+          enctype="multipart/form-data"
+          style="margin-top:1.5rem; max-width:500px;">
 
-        <button class="apply-btn" style="margin-top:1rem;">Add Faculty</button>
+        <input type="text" name="name" placeholder="Name" required>
+        <input type="text" name="designation" placeholder="Designation" required>
+        <input type="text" name="department" placeholder="Department" required>
+        <input type="email" name="email" placeholder="Email" required>
+
+        <label style="margin-top:1rem; display:block;">
+            Faculty Image
+            <input type="file" name="image" accept="image/*">
+        </label>
+
+        <button class="btn primary" style="margin-top:1rem;">
+            Add Faculty
+        </button>
     </form>
 
     <hr style="margin:2rem 0;">
 
+    <!-- EXISTING FACULTY -->
+    <h3>Existing Faculty</h3>
+
     {% for f in faculty %}
-        <p>{{ f.name }} — {{ f.department }}</p>
+    <div class="card" style="margin-top:1rem;">
+        <h4>{{ f.name }}</h4>
+        <p>{{ f.designation }} — {{ f.department }}</p>
+        <small>{{ f.email }}</small>
+
+        {% if f.image %}
+        <img src="{{ url_for('static', filename='images/' ~ f.image) }}"
+             style="width:100%; max-width:220px; border-radius:12px; margin-top:1rem;">
+        {% endif %}
+
+        <form method="POST"
+              action="/admin/faculty/delete/{{ f._id }}"
+              style="margin-top:1rem;">
+            <button class="btn secondary"
+                    onclick="return confirm('Delete this faculty member?')"
+                    style="border-color:#ef4b5a; color:#ef4b5a;">
+                Delete
+            </button>
+        </form>
+    </div>
     {% endfor %}
 </section>
 
